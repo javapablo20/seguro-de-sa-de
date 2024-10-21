@@ -11,7 +11,7 @@
 <body>
     <div class="min-h-screen bg-gray-100 flex flex-col">
         <!-- Header -->
-        <header class="bg-teal-600 text-white p-4">
+        <header class="bg-teal-600 ">
             <div class="container mx-auto">
                 <h1 class="text-2xl">Seguradora de Saúde</h1>
             </div>
@@ -23,7 +23,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="bg-teal-600 text-white p-4 text-center">
+        <footer class="bg-teal-600 ">
             <p>&copy; 2024 Saúde+. Todos os direitos reservados.</p>
         </footer>
     </div>

@@ -1,15 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanoController;
 
-// Exibir o formulário de comparação de planos
-Route::get('/comparar-planos', [PlanoController::class, 'showComparisonForm'])->name('compararPlanos');
+Route::get('/pesquisar-planos', [PlanoController::class, 'showSearchForm'])->name('pesquisarPlanos');
 
-// Comparar planos
-Route::post('/comparar-planos', [PlanoController::class, 'comparar']);
+Route::get('/comparar-planos', [PlanoController::class, 'showComparisonForm'])->name('compararPlanosForm');
+Route::post('/comparar-planos', [PlanoController::class, 'comparar'])->name('compararPlanos');
 
 
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -22,7 +20,7 @@ Route::get('/welcome', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/pagina', function () {
-    return view('pagina');
-})->name('pagina');
+Route::get('/bemvindo', function () {
+    return view('bemvindo');
+})->name('bemvindo');
 

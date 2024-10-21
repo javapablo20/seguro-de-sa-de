@@ -4,6 +4,12 @@
 <div class="container">
     <h1>Comparação de Planos</h1>
 
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('compararPlanos') }}">
         @csrf
         <h2>Selecione os planos para comparar:</h2>
@@ -13,6 +19,7 @@
                 <label>{{ $plano->nome }} - R$ {{ $plano->preco }}</label>
             </div>
         @endforeach
+        <br>
         <button type="submit">Comparar</button>
     </form>
 </div>

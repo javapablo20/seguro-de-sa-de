@@ -50,7 +50,7 @@ class AuthController extends Controller
             'cliente_id' => $cliente->id,
         ]);
 
-        return redirect()->route('pagina')->with('success', 'Registro realizado com sucesso! Bem-vindo!');
+        return redirect()->route('bemvindo')->with('success', 'Registro realizado com sucesso! Bem-vindo!');
     }
 
     public function showLoginForm()
@@ -74,7 +74,7 @@ class AuthController extends Controller
         if ($user && Hash::check($request->senha, $user->senha)) {
             // Autenticação bem-sucedida
             Auth::login($user);
-            return redirect()->route('pagina')->with('success', 'Login realizado com sucesso!');
+            return redirect()->route('bemvindo')->with('success', 'Login realizado com sucesso!');
         }
 
         return back()->withErrors(['email' => 'Credenciais inválidas.']);
