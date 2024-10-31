@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanoController;
 
 Route::get('/pesquisar-planos', [PlanoController::class, 'showSearchForm'])->name('pesquisarPlanos');
+Route::get('/resultados-pesquisa', [PlanoController::class, 'pesquisarPlanos'])->name('resultadosPesquisa');
 
 Route::get('/comparar-planos', [PlanoController::class, 'showComparisonForm'])->name('compararPlanosForm');
 Route::post('/comparar-planos', [PlanoController::class, 'comparar'])->name('compararPlanos');

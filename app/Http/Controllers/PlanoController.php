@@ -35,23 +35,34 @@ class PlanoController extends Controller
 
     public function showSearchForm(Request $request)
     {
+        // Obtenha tipos e faixas etárias distintas
         $tipos = Plano::select('tipo')->distinct()->get();
         $faixaEtarias = Plano::select('faixaetaria')->distinct()->get();
-        // Aqui você pode adicionar os critérios de cobertura, se houver.
 
+        // Inicializa uma variável para armazenar os resultados
+        $resultados = null;
+
+        // Query inicial para buscar planos
         $planos = Plano::query();
 
-        // Adicionar filtros
+        // Adiciona filtro de tipo se estiver presente
         if ($request->filled('tipo')) {
+            \Log::info('Filtro de tipo aplicado: ' . $request->tipo);
             $planos->where('tipo', $request->tipo);
         }
 
+        // Adiciona filtro de faixa etária se estiver presente
         if ($request->filled('faixaetaria')) {
+            \Log::info('Filtro de faixa etária aplicado: ' . $request->faixaetaria);
             $planos->where('faixaetaria', $request->faixaetaria);
         }
 
-        $planos = $planos->get();
+        // Executa a consulta e obtém os resultados
+        $resultados = $planos->get();
 
-        return view('pesquisar_planos', compact('planos', 'tipos', 'faixaEtarias'));
+        \Log::info('Resultados da pesquisa: ', $resultados->toArray());
+
+        return view('pesquisar_planos', compact('resultados', 'tipos', 'faixaEtarias'));
     }
+
 }

@@ -10,6 +10,17 @@ class Apolice extends Model
 
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'status',
+        'valor',
+        'descricao',
+        'alteracao',
+        'datainicio',
+        'datafim',
+        'created_at',
+        'updated_at',
+    ];
     public function apolices()
     {
         return $this->hasMany(Apolice::class);

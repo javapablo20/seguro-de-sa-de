@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seguradora de Saúde</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -13,7 +14,10 @@
         <!-- Header -->
         <header class="bg-teal-600 ">
             <div class="container mx-auto">
-                <h1 class="text-2xl">Seguradora de Saúde</h1>
+                <a href="{{ route('welcome') }}">
+                    <i class="fa-solid fa-hand-holding-medical text-6xl text-blue-500"
+                        style="font-size: 50px; color: rgb(220 38 38);"></i>
+                </a>
             </div>
         </header>
 
