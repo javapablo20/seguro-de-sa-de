@@ -33,36 +33,55 @@ class PlanoController extends Controller
         return view('comparacao_resultado', compact('planosSelecionados'));
     }
 
+
     public function showSearchForm(Request $request)
     {
         // Obtenha tipos e faixas etárias distintas
         $tipos = Plano::select('tipo')->distinct()->get();
         $faixaEtarias = Plano::select('faixaetaria')->distinct()->get();
 
-        // Inicializa uma variável para armazenar os resultados
-        $resultados = null;
-
         // Query inicial para buscar planos
         $planos = Plano::query();
 
-        // Adiciona filtro de tipo se estiver presente
+        // Construindo a mensagem de filtros aplicados
+        $filtrosAplicados = "Filtros aplicados: ";
+
+        // Filtro de tipo
         if ($request->filled('tipo')) {
-            \Log::info('Filtro de tipo aplicado: ' . $request->tipo);
             $planos->where('tipo', $request->tipo);
+            $filtrosAplicados .= "Tipo: " . ucfirst($request->tipo) . "; ";
+        } else {
+            $filtrosAplicados .= "Tipo: Todos; ";
         }
 
-        // Adiciona filtro de faixa etária se estiver presente
+        // Filtro de faixa etária (aplicado somente se estiver preenchido)
         if ($request->filled('faixaetaria')) {
-            \Log::info('Filtro de faixa etária aplicado: ' . $request->faixaetaria);
-            $planos->where('faixaetaria', $request->faixaetaria);
+            if (strpos($request->faixaetaria, '-') !== false) {
+                [$idadeMinFiltro, $idadeMaxFiltro] = explode('-', $request->faixaetaria);
+                $planos->where(function ($query) use ($idadeMinFiltro, $idadeMaxFiltro) {
+                    $query->whereRaw("CAST(SUBSTRING_INDEX(faixaetaria, '-', 1) AS UNSIGNED) <= ?", [$idadeMaxFiltro])
+                        ->whereRaw("CAST(SUBSTRING_INDEX(faixaetaria, '-', -1) AS UNSIGNED) >= ?", [$idadeMinFiltro]);
+                });
+                $filtrosAplicados .= "Faixa Etária: " . $request->faixaetaria . "; ";
+            } else {
+                $idadeMinFiltro = (int) $request->faixaetaria;
+                $planos->whereRaw("CAST(SUBSTRING_INDEX(faixaetaria, '-', -1) AS UNSIGNED) >= ?", [$idadeMinFiltro]);
+                $filtrosAplicados .= "Faixa Etária: " . $request->faixaetaria . "; ";
+            }
+        } else {
+            $filtrosAplicados .= "Faixa Etária: Todas";
         }
 
         // Executa a consulta e obtém os resultados
         $resultados = $planos->get();
 
-        \Log::info('Resultados da pesquisa: ', $resultados->toArray());
+        // Se não houver resultados, exibe uma mensagem informativa
+        if ($resultados->isEmpty()) {
+            return view('pesquisar_planos', compact('tipos', 'faixaEtarias'))
+                ->with('mensagem', 'Nenhum plano encontrado com os critérios selecionados.')
+                ->with('filtrosAplicados', $filtrosAplicados);
+        }
 
-        return view('pesquisar_planos', compact('resultados', 'tipos', 'faixaEtarias'));
+        return view('pesquisar_planos', compact('resultados', 'tipos', 'faixaEtarias', 'filtrosAplicados'));
     }
-
 }

@@ -14,7 +14,7 @@
         <!-- Header -->
         <header class="bg-teal-600 ">
             <div class="container mx-auto">
-                <a href="{{ route('welcome') }}">
+                <a href="{{ route('bemvindo') }}">
                     <i class="fa-solid fa-hand-holding-medical text-6xl text-blue-500"
                         style="font-size: 50px; color: rgb(220 38 38);"></i>
                 </a>
