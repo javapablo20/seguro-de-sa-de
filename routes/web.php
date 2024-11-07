@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuporteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanoController;
@@ -16,6 +17,16 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte');
+Route::post('/suporte/ticket', [SuporteController::class, 'criarTicket'])->name('suporte.ticket');
+
+Route::get('/comprar', [PlanoController::class, 'showCompra'])->name('comprar.planos');
+Route::get('/comprar/{id}', [PlanoController::class, 'finalizarCompra'])->name('comprar.plano');
+Route::get('/{id}/detalhes', [PlanoController::class, 'detalhes'])->name('plano.detalhes');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/comprar/{id}/confirmar', [PlanoController::class, 'confirmarCompra'])->name('confirmarCompra');
+});
 
 Route::get('/welcome', function () {
     return view('welcome');
