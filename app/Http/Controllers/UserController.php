@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        // Garante que apenas usuários autenticados possam acessar os métodos deste controller
+        $this->middleware('auth');
+    }
+
     public function perfil()
     {
-        // Obter o usuário autenticado
+        // Obtém o usuário autenticado e passa para a view do perfil
         $user = Auth::user();
-
-        // Caso não esteja autenticado, redireciona para o login
-        if (!$user) {
-            return redirect()->route('login')->withErrors(['msg' => 'É necessário estar logado para acessar o perfil.']);
-        }
-
-        // Passa o usuário para a view do perfil
         return view('perfil', compact('user'));
     }
 }

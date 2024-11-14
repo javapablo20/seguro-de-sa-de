@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Cliente;
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -17,7 +18,6 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // Valida os dados do formulário
         $request->validate([
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|max:14|unique:clientes,cpf',
@@ -41,13 +41,14 @@ class AuthController extends Controller
             'telefone' => $request->telefone,
             'idade' => $idade,
             'historicomedico' => $request->historicomedico,  // Opcional
-            'senha' => Hash::make($request->senha),
         ]);
 
-        Usuario::create([
+        // Cria o usuário na tabela 'users'
+        User::create([
+            'name' => $cliente->nome,
             'email' => $cliente->email,
-            'senha' => $cliente->senha, // senha já está criptografada
-            'cliente_id' => $cliente->id,
+            'password' => Hash::make($request->senha),
+            'cliente_id' => $cliente->id, // Relaciona com o cliente
         ]);
 
         return redirect()->route('bemvindo')->with('success', 'Registro realizado com sucesso! Bem-vindo!');
@@ -63,17 +64,10 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|string|email',
             'senha' => 'required|string',
-
         ]);
 
-        $credentials = ['email' => $request->email, 'senha' => $request->senha];
-
-        // Verificação do usuário no banco de dados
-        $user = Usuario::where('email', $request->email)->first();
-
-        if ($user && Hash::check($request->senha, $user->senha)) {
-            // Autenticação bem-sucedida
-            Auth::login($user);
+        // Tenta autenticar o usuário
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->senha])) {
             return redirect()->route('bemvindo')->with('success', 'Login realizado com sucesso!');
         }
 

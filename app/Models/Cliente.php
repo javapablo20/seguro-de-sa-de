@@ -21,4 +21,9 @@ class Cliente extends Model
         'senha',
         'telefone',
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'cliente_id');
+    }
 }
